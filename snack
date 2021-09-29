@@ -1,0 +1,213 @@
+<?php
+$con = mysqli_connect("localhost", "kezh", "bestkoala14", "kezh_canteen");
+if(mysqli_connect_errno()){
+    echo "Failed to connect to MySQL:".mysqli_connect_error(); die();}
+else{
+    echo "connected to database";
+}
+
+if(isset($_GET['snack'])){
+    $id = $_GET['snack'];
+}else{
+    $id = 1;
+}
+
+$all_snacks_query = "SELECT snacksID, snacks FROM snack";
+$all_snacks_result = mysqli_query($con, $all_snacks_query);
+
+$this_snack_query = "SELECT snacksID, snacks, price, stock, net_content FROM snack where snacksID = '" . $id . "'";
+$this_snack_result = mysqli_query($con, $this_snack_query);
+$this_snack_record = mysqli_fetch_assoc($this_snack_result);
+?>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <title> Jo's Canteen</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+    <body>
+    <header>
+        <h1> Jo's Canteen</h1>
+        <nav>
+            <ul>
+                <li> <a href="index.php">HOME </a> </li>
+                <li> <a href="drinks.php">DRINKS </a></li>
+                <li> <a href="snacks.php">SNACKS </a> </li>
+            </ul>
+        </nav>
+    </header>
+    </body>
+    <main>
+        <h2> Snacks Information</h2>
+
+        <?php
+        echo "<p> Snack Number: " . $this_snack_record['snacksID'] . "<br>";
+        echo "<p> Snack: " . $this_snack_record['snacks'] . "<br>";
+        echo "<p> Cost: " . $this_snack_record['price'] . "<br>";
+        echo "<P> Stock: " . $this_snack_record['stock'] . "<br>";
+        echo "<P> Net Content: " . $this_snack_record['net_content'] . "<br>";
+
+        ?>
+
+        <h2> Select Another Snack</h2>
+        <!--snacks form-->
+        <form name="snacks-form" id="snacks-form" method="get" action="snacks.php">
+            <select id="snack" name="snack">
+                <!--options-->
+                <?php
+
+                while($all_snacks_record = mysqli_fetch_assoc($all_snacks_result)){
+                    echo "<option value = '". $all_snacks_record['snacksID'] . "'>";
+                    echo $all_snacks_record['snacks'];
+                    echo "</option>";
+                }
+                ?>
+            </select>
+
+            <input type="submit" name="snacks_button" value="Show me the snack information">
+        </form>
+
+        <h2> Search An Snack </h2>
+        <form action="" method="post">
+            <input type="text" name="search">
+            <input type="submit" name="submit" value="Search">
+        </form>
+        <?php
+
+        if(isset($_POST['search'])) {
+            $search = $_POST['search'];
+
+            $query1 = "SELECT * FROM snack WHERE snacks LIKE '%$search%'";
+            $query = mysqli_query($con, $query1);
+            $count = mysqli_num_rows($query);
+
+            if($count == 0){
+                echo "There was no search results!";
+
+            }else{
+
+                while ($row = mysqli_fetch_array($query)) {
+
+                    echo $row ['snacks'];
+                    echo "<br>";
+                }
+            }
+        }
+        ?>
+
+        <div class="center">
+            <table>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Item</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>Fruit Burst</td>
+                    <td>$3.99</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>Blue Bird salted chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>Blue Bird sour cream chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>Whittacker's milkchocolate</td>
+                    <td>$2.00</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>Whittacker's Peanut slab</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td>Haribo Goldbears</td>
+                    <td>$$2.50</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Haribo Starmix</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td>Lay's original flavour chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>22</td>
+                    <td>Lay's BBQ flavour chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>23</td>
+                    <td>Ham sandwich</td>
+                    <td>$3.50</td>
+                </tr>
+                <tr>
+                    <td>24</td>
+                    <td>Egg sandwich</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>Grilled chicken sandwich</td>
+                    <td>$3.50</td>
+                </tr>
+                <tr>
+                    <td>26</td>
+                    <td>Egg salad</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td>Avacado salad</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>28</td>
+                    <td>Fruit salad</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>Cheese cake</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>$</td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td>Chocolate pudding</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>31</td>
+                    <td>Blueberry cake</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>32</td>
+                    <td>Strawberry mousse</td>
+                    <td>$2.50</td>
+                </tr>
+            </table>
+        </div>
+
+</main>
