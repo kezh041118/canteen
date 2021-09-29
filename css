@@ -1,0 +1,35 @@
+head {
+    color: blue;
+}
+
+body {
+    color: darkslateblue;
+    list-style-type: none;
+    text-align: center;
+}
+
+a{
+    text-align: center;
+}
+
+form{
+    font-weight: bold;
+    border: darkslateblue;
+}
+
+nav {
+    text-align:center;
+}
+
+
+li {
+    list-style-type: none;
+}
+
+.center {
+    width: 300px;
+    background: yellow;
+    text-align: center;
+    margin: 0 auto;
+}
+
