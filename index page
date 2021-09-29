@@ -1,0 +1,369 @@
+<?php
+$con = mysqli_connect("localhost", "kezh", "bestkoala14", "kezh_canteen");
+if(mysqli_connect_errno()){
+    echo "Failed to connect to MySQL:".mysqli_connect_error(); die();}
+else{
+    echo "connected to database";
+}
+
+/*Drink query*/
+/*SELECT drinksID, drinks_name from drinks*/
+
+$all_drinks_query = "SELECT drinksID, drinks FROM drink";
+$all_drinks_result = mysqli_query($con, $all_drinks_query);
+
+$all_snacks_query = "SELECT snacksID, snacks FROM snack";
+$all_snacks_result = mysqli_query($con, $all_snacks_query);
+
+if(isset($_GET['weekly_item'])){
+    $id = $_GET['weekly_item'];
+}else{
+    $id = 1;
+}
+
+$all_items_query = "SELECT weeklyID FROM weekly_item";
+$all_items_result = mysqli_query($con, $all_items_query);
+
+$this_item_query = "SELECT weeklyID, drinksID, snacksID FROM weekly_item where weeklyID = '" . $id . "'";
+$this_item_result = mysqli_query($con, $this_item_query);
+$this_item_record = mysqli_fetch_assoc($this_item_result);
+?>
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <title> Jo's Canteen</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+    <body>
+        <header>
+            <h1> Jo's Canteen</h1>
+            <nav>
+                <ul>
+                    <li> <a href="main.php"> HOME </a> </li>
+                    <li> <a href="drinks.php"> DRINKS </a></li>
+                    <li> <a href="snacks.php"> SNACKS </a> </li>
+                </ul>
+            </nav>
+        </header>
+    </body>
+    <main>
+
+        <!--Drinks form-->
+        <form name="drinks-form" id="drinks-form" method="get" action="drinks.php">
+            <select id="drink" name="drink">
+                <!--options-->
+                <?php
+                while($all_drinks_record = mysqli_fetch_assoc($all_drinks_result)){
+                    echo "<option value = '". $all_drinks_record['drinksID'] . "'>";
+                    echo $all_drinks_record['drinks'];
+                    echo "</option>";
+                }
+                ?>
+
+            </select>
+
+            <input type="submit" name="drinks_button" value="Show me the drink information">
+        </form>
+
+        <!--snacks form-->
+        <form name="snacks-form" id="snacks-form" method="get" action="snacks.php">
+            <select id="snack" name="snack">
+                <!--options-->
+                <?php
+
+                while($all_snacks_record = mysqli_fetch_assoc($all_snacks_result)){
+                    echo "<option value = '". $all_snacks_record['snacksID'] . "'>";
+                    echo $all_snacks_record['snacks'];
+                    echo "</option>";
+                }
+                ?>
+            </select>
+
+            <input type="submit" name="snacks_button" value="Show me the snack information">
+        </form>
+
+        <h2> Weekly Item Information</h2>
+        <!--weekly items form-->
+        <form name="weekly_item-form" id="weekly_item-form" method="get" action="index.php">
+            <select id="weekly_item" name="weekly_item">
+                <!--options-->
+
+                <?php
+
+                while($all_items_record = mysqli_fetch_assoc($all_items_result)){
+                    echo "<option value = '". $all_items_record['weeklyID'] . "'>";
+                    echo $all_items_record['weeklyID'];
+                    echo "</option>";
+                }
+                ?>
+            </select>
+
+            <input type="submit" name="weekly_item_button" value="Show me the weekly special item information">
+        </form>
+
+        <?php
+        echo "<p> Date(Monday to Friday): " . $this_item_record['weeklyID'] . "<br>";
+        echo "<p> Item Name 1: " . $this_item_record['drinksID'] . "<br>";
+        echo "<p> Item Name 2: " . $this_item_record['snacksID'] . "<br>";
+        ?>
+
+        <div class="center">
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Item ID</th>
+                    <th>Item 1</th>
+                    <th>Item ID</th>
+                    <th>Item 2</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>9</td>
+                    <td>Mountain Dew</td>
+                    <td>23</td>
+                    <td>Ham sandwich</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>10</td>
+                    <td>Fresh Up</td>
+                    <td>18</td>
+                    <td>Whittacker's Peanut slab</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>Diet Coke</td>
+                    <td>28</td>
+                    <td>Fruit salad</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>20</td>
+                    <td>Haribo starmix</td>
+                    <td>5</td>
+                    <td>Diet Pepper</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>11</td>
+                    <td>Water</td>
+                    <td>3</td>
+                    <td>Fanta</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="center">
+            <table>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Item</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Coke</td>
+                    <td>$1.50</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Pepsi</td>
+                    <td>$1.50</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Fanta</td>
+                    <td>$1.50</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Diet Coke</td>
+                    <td>$1.50</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Diet Pepsi</td>
+                    <td>$1.50</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Sprite</td>
+                    <td>$1.50</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Dr.Pepper</td>
+                    <td>$1.50</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Coke Zero</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Mountain Dew</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Fresh Up</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Water</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Apple Juice</td>
+                    <td>$3.00</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="center">
+            <table>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Item</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>Fruit Burst</td>
+                    <td>$3.99</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>Blue Bird salted chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>Blue Bird sour cream chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>Whittacker's milkchocolate</td>
+                    <td>$2.00</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>Whittacker's Peanut slab</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td>Haribo Goldbears</td>
+                    <td>$$2.50</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Haribo Starmix</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td>Lay's original flavour chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>22</td>
+                    <td>Lay's BBQ flavour chips</td>
+                    <td>$2.99</td>
+                </tr>
+                <tr>
+                    <td>23</td>
+                    <td>Ham sandwich</td>
+                    <td>$3.50</td>
+                </tr>
+                <tr>
+                    <td>24</td>
+                    <td>Egg sandwich</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>Grilled chicken sandwich</td>
+                    <td>$3.50</td>
+                </tr>
+                <tr>
+                    <td>26</td>
+                    <td>Egg salad</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td>Avacado salad</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>28</td>
+                    <td>Fruit salad</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>Cheese cake</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td>Chocolate pudding</td>
+                    <td>$2.50</td>
+                </tr>
+                <tr>
+                    <td>31</td>
+                    <td>Blueberry cake</td>
+                    <td>$3.00</td>
+                </tr>
+                <tr>
+                    <td>32</td>
+                    <td>Strawberry mousse</td>
+                    <td>$2.50</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2> Search A Drink </h2>
+        <form action="" method="post">
+            <input type="text" name="search">
+            <input type="submit" name="submit" value="Search">
+        </form>
+        <?php
+
+        if(isset($_POST['search'])) {
+            $search = $_POST['search'];
+
+            $query1 = "SELECT * FROM drink, snack WHERE drinks, snacks LIKE '%$search%'";
+            $query = mysqli_query($con, $query1);
+            $count = mysqli_num_rows($query);
+
+            if($count == 0){
+                echo "There was no search results!";
+
+            }else{
+
+                while ($row = mysqli_fetch_array($query)) {
+
+                    echo $row ['drinks'];
+                    echo $row ['snacks'];
+                    echo "<br>";
+                }
+            }
+        }
+        ?>
+
+    </main>
+
+</html>
